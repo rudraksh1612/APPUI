@@ -1,0 +1,9 @@
+npm install lucide-react
+
+# or
+
+yarn add lucide-react
+
+# or
+
+pnpm add lucide-react
