@@ -1,18 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Copy, Check, Sun, Moon } from 'lucide-react';
+import Toast from './Toast';
 
 export default function MainArea({ selectedComponent }) {
   const [copied, setCopied] = useState(false);
   const [copiedDependencies, setCopiedDependencies] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
+  const [showToast, setShowToast] = useState(false);
   const [previewBg, setPreviewBg] = useState('white');
   const [previewWidth, setPreviewWidth] = useState(1500);
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1);
 
+  const triggerToast = (msg) => {
+    setToastMsg(msg);
+    setShowToast(false);
+    setTimeout(() => setShowToast(true), 10);
+  };
+
   const handleCopyCode = () => {
     if (selectedComponent?.code) {
       navigator.clipboard.writeText(selectedComponent.code);
       setCopied(true);
+      triggerToast('Code copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -21,6 +31,7 @@ export default function MainArea({ selectedComponent }) {
     if (selectedComponent?.dependencies) {
       navigator.clipboard.writeText(selectedComponent.dependencies);
       setCopiedDependencies(true);
+      triggerToast('Dependencies copied!');
       setTimeout(() => setCopiedDependencies(false), 2000);
     }
   };
@@ -59,6 +70,7 @@ export default function MainArea({ selectedComponent }) {
 
   return (
     <div className="w-full h-full bg-black overflow-y-auto p-4 md:p-6 lg:p-8 space-y-6">
+      <Toast message={toastMsg} show={showToast} />
       {/* Preview Section */}
       <div className="bg-white/5 backdrop-blur-md rounded-xl overflow-hidden border border-white/10">
         <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/10">
